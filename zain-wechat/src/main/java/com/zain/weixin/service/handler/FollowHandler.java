@@ -53,11 +53,13 @@ public class FollowHandler extends BaseHandler {
         
         if(!isExist) { //如果用户不存在
             //新增用户
+            userWechat.setNickName(wxMpUser.getNickname());
+            userWechat.setHeadImgUrl(wxMpUser.getHeadImgUrl());;
             userService.add(userWechat);
         } 
         
         WxMpXmlOutTextMessage msg = WxMpXmlOutMessage.TEXT()
-            .content("尊敬的" + wxMpUser.getNickname() + "，您好！")
+            .content("尊敬的" + wxMpUser.getNickname() + "，您好！"+ "\r\n" +"欢迎关注演员公会！")
             .fromUser(wxMessage.getToUser())
             .toUser(wxMpUser.getOpenId())
             .build();

@@ -11,11 +11,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.zain.common.controller.BaseController;
 import com.zain.common.entity.ErrorResult;
 import com.zain.common.entity.SuccessResult;
 import com.zain.common.entity.SysResult;
 import com.zain.user.entity.UserAccount;
+import com.zain.user.entity.UserWechat;
 import com.zain.user.service.UserService;
+import com.zain.web.utils.CookieUtil;
 
 import me.chanjar.weixin.common.exception.WxErrorException;
 import me.chanjar.weixin.mp.api.WxMpService;
@@ -23,20 +26,30 @@ import me.chanjar.weixin.mp.bean.result.WxMpOAuth2AccessToken;
 
 @RequestMapping("/web")
 @Controller
-public class LoginController {
+public class LoginController extends BaseController {
     
     @Autowired
     UserService userService;
     @Autowired
     protected WxMpService wxMpService;
     
+    
 	@RequestMapping("/{htmlName}.html")
-	public String login(@PathVariable("htmlName") String htmlName, HttpServletResponse response, @RequestParam(value = "code") String code) {
+	public String login(@PathVariable("htmlName") String htmlName, HttpServletResponse response, @RequestParam(value = "code") String code, HttpServletRequest request) {
 	    
+	    //判断用户是否已经注册
+	    Cookie cookie = CookieUtil.getCookie(request.getCookies(), "openId");
+	    if(null != cookie) {
+	        logger.debug("已注册！ ");
+	        return htmlName;
+	    }
+	    
+	    // 用户授权登录
         WxMpOAuth2AccessToken accessToken = null;
         try {
             accessToken = this.wxMpService.oauth2getAccessToken(code);
         } catch (WxErrorException e) {
+            logger.error("accessToken err: ", e);
             return "login";
         }
 	    
@@ -48,6 +61,7 @@ public class LoginController {
 	    boolean isRegister = userService.isRegister(openId);
 	    
 	    if(!isRegister) { //未注册
+	        logger.debug("未注册！ ");
 	        return "login";
 	    }
 	    
@@ -83,8 +97,13 @@ public class LoginController {
         userAccount.setOpenId(openId);
         userAccount.setState(1);
         userService.update(userAccount);
-	    
+        
 	    return SuccessResult.ok();
+	}
+	
+	@RequestMapping("/intoPage/{htmlName}.html")
+	public String intoPage(@PathVariable("htmlName") String htmlName) {
+	    return htmlName;
 	}
 	
 }

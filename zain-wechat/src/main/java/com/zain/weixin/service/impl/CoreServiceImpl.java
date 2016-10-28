@@ -60,7 +60,7 @@ public class CoreServiceImpl implements CoreService {
         // 1.关注事件
         newRouter.rule().async(false).msgType(WxConsts.XML_MSG_EVENT)
             .event(WxConsts.EVT_SUBSCRIBE).handler(this.followHandler)
-            .next();
+            .end();
         
         // 2.点击事件1
         newRouter.rule().async(false).msgType(WxConsts.XML_MSG_EVENT)

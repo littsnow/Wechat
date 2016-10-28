@@ -1,0 +1,54 @@
+/************** 覆盖原样式部分 start ******************/
+/* 全局 */
+body {
+    height: 100%;
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    font-family: 'Microsoft YaHei';
+}
+
+/* 文字标签，内联的 */
+label {
+    margin: 0px 10px;
+    display: inline-block;
+    max-width: 100%;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+/* 响应布局，栅格布局 */
+.col-lg-3 {
+    padding: 0px;
+}
+.col-lg-6 {
+    padding: 0px;
+}
+.col-xs-4 {
+	padding: 5px;
+}
+
+/* 输入框 */
+input {
+    color: black;
+}
+
+.form-group {
+	text-align: left;
+}
+    
+    
+/************** 自定义样式部分 start ******************/   
+/* 必填字段*样式 */
+label .importFiled {
+    color:red;
+}
+
+/* 需要清除的输入框 */
+.keyclear {
+    margin: 5px 0px;
+}
+
+.main {
+	padding: 20px;
+}
