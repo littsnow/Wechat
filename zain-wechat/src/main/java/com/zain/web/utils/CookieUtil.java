@@ -18,7 +18,13 @@ public final class CookieUtil {
      * @return 
      */
     public static String getCookieVal(Cookie[] cookies, String cookieName) {
-        return getCookie(cookies, cookieName).getValue();
+        Cookie cookie = getCookie(cookies, cookieName);
+        
+        if(null == cookie) {
+            return "";
+        }
+        
+        return cookie.getValue();
     }
     
     /**
@@ -31,11 +37,15 @@ public final class CookieUtil {
     public static Cookie getCookie(Cookie[] cookies, String cookieName) {
         Cookie cookie = null;
         
-        for(Cookie temp : cookies) {
-            if(cookieName.equals(temp.getName())) {
-                cookie = temp;
-                break;
+        try {
+            for(Cookie temp : cookies) {
+                if(cookieName.equals(temp.getName())) {
+                    cookie = temp;
+                    break;
+                }
             }
+        } catch(NullPointerException e) {
+            return null;
         }
         
         return cookie;
